@@ -8,7 +8,7 @@ This behavior can be illustrated.
 
 Let's deploy a few `nginx` pods ...
 ```
-kubectl apply -f - <<EOF
+kubectl <<EOF >nginx-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,6 +31,9 @@ spec:
         ports:
         - containerPort: 80
 EOF
+```
+```
+kubectl apply -f nginx-deployment.yaml
 ```
 Note the pod name as well as the READY 1/1 state. 
 This 1/1 actually indicates the number of running containers in the pod.
@@ -158,4 +161,42 @@ To troubleshoot a hard-to-reproduce bug, this might be challenging.
   * Create a copy of an existing pod (with certain attributes changed)
   * Add an ephemeral container to an already running pod, for example to add debugging utilities without restarting the pod.
   * Create a new pod that runs in the node's host namespaces and can access the node's filesystem.
+
+### Create a copy of an existing pod
+In order to demonstrate the behavior, let's reset out deployment.
+```
+kubectl apply -f - <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+EOF
+```
+```
+kubectl debug -it $PODNAME  --image=xxradar/hackon --copy-to=my-debugger 
+At the stage the pod is copied into pod my-debugger and a contaier is attached ... 2/2
+
+NAME                  READY   STATUS    RESTARTS   AGE
+my-debugger           2/2     Running   0          30s
+www-6d49b97f5-4s7q9   1/1     Running   0          48m
+
+kubectl describe po my-debugger
+```
 
