@@ -146,5 +146,9 @@ Events:
   Normal  Started    7m37s  kubelet            Started container nginx
  ```
 
-Sometimes it's necessary to inspect the state of an existing Pod, however, for example to troubleshoot a hard-to-reproduce bug. In these cases you can run an ephemeral container in an existing Pod to inspect its state and run arbitrary commands.
-What is an ephemeral con
+Sometimes it's necessary to inspect the state of an existing Pod.
+In order to examine a running pod, you can use the `kubect exec` mechanism. This works fine to troublehshoot issues, except that secure container image do not contain debugging tools (distroless or hardened images).
+
+The example of patching containers might be a solution but as already stated, the pods are replaced and the second container only share the pods networking namespace.
+
+To troubleshoot a hard-to-reproduce bug, this might be challenging.
