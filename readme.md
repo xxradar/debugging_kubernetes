@@ -199,4 +199,21 @@ nginx-deployment-7848d4b86f-xztfq   1/1     Running            0          5m23s
 nginx-deployment-7848d4b86f-g6md9   1/1     Running            0          5m23s
 my-debugger                         2/2     Running            0          2m9s
 ```
+We only shared the network namespace in this example. This is great to test the application over the shared networking stack, but does not grant us access to the process and filesystem. Sharing the process namespacess can be obtained via the `--share-processes=true` flag.
+```
+kubectl debug  -it $PODNAME --image=xxradar/hackon  --copy-to=my-debugger2 --share-processes=true -- bash
+Defaulting debug container name to debugger-w9s48.
+If you don't see a command prompt, try pressing enter.
+root@my-debugger2:/# ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.2  0.0   1028     4 ?        Ss   19:32   0:00 /pause
+root         7  0.0  0.0   8856  5328 ?        Ss   19:32   0:00 nginx: master process nginx -g daemon off;
+tcpdump     39  0.0  0.0   9244  2456 ?        S    19:32   0:00 nginx: worker process
+tcpdump     40  0.0  0.0   9244  2456 ?        S    19:32   0:00 nginx: worker process
+root        41  0.2  0.0   4116  3408 pts/0    Ss   19:32   0:00 bash
+root        51  0.0  0.0   5888  2844 pts/0    R+   19:32   0:00 ps aux
+root@my-debugger2:/#
+```
+
+
 
