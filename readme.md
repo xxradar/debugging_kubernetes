@@ -147,7 +147,7 @@ Events:
  ```
 
 Sometimes it's necessary to inspect the state of an existing Pod.
-In order to examine a running pod, you can use the `kubectl exec` mechanism. This works fine to troublehshoot issues, except that secure container images do not contain debugging tools (distroless or hardened images).
+In order to examine a running pod, you can use the `kubectl exec` mechanism. This works fine to troublehshoot issues, except that secure container images do not contain debugging tools (distroless or hardened images) amd runtime security solutions might block installing them.
 
 The example of patching containers might be a solution but as already stated, the pods are replaced and the second container only shares the pods networking namespace by default.
 
