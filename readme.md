@@ -178,6 +178,7 @@ nginx-deployment-7848d4b86f-g6md9   1/1     Running   0          2m11s
 ```
 ```
 export PODNAME=nginx-deployment-7848d4b86f-6qzm9
+```
 
 kubectl debug -it $PODNAME  --image=xxradar/hackon --copy-to=my-debugger
 
@@ -188,7 +189,8 @@ If you don't see a command prompt, try pressing enter.
 
 root@my-debugger:/#
 ```
-At the stage the pod is copied into pod my-debugger and a container is attached. You can verify this in a different terminal
+At the stage the pod is copied. A new pod `my-debugger` is started and a container with the specified `image` is attached . 
+You can verify this in a different terminal.
 ```
 kubectl get po
 NAME                                READY   STATUS             RESTARTS   AGE
