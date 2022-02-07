@@ -189,7 +189,7 @@ If you don't see a command prompt, try pressing enter.
 
 root@my-debugger:/#
 ```
-At the stage the pod is copied. A new pod `my-debugger` is started and a container with the specified `image` is attached . 
+At this stage the pod is copied. A new pod `my-debugger` is started and a container with the specified `image` is attached . 
 You can verify this in a different terminal.
 ```
 kubectl get po
