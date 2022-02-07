@@ -165,29 +165,9 @@ To troubleshoot a hard-to-reproduce bug, this might be challenging.
 ### Create a copy of an existing pod
 In order to demonstrate the behavior, let's reset out deployment.
 ```
-kubectl apply -f - <<EOF
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-deployment
-  labels:
-    app: nginx
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: nginx
-        ports:
-        - containerPort: 80
-EOF
+kubectl delete deploy nginx-deployment
+kubectl apply -f nginx-deployment.yaml
+
 ```
 ```
 kubectl debug -it $PODNAME  --image=xxradar/hackon --copy-to=my-debugger 
