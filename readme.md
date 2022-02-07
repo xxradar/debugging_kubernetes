@@ -154,5 +154,8 @@ The example of patching containers might be a solution but as already stated, th
 To troubleshoot a hard-to-reproduce bug, this might be challenging.
 
 ### `kubectl debug` to the rescue
-
+`kubectl debug` might help us in a few different ways.
+  * Create a copy of an existing pod with certain attributes changed
+  * Add an ephemeral container to an already running pod, for example to add debugging utilities without restarting the pod.
+  * Create a new pod that runs in the node's host namespaces and can access the node's filesystem.
 
