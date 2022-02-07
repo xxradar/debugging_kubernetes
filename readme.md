@@ -32,7 +32,7 @@ spec:
         - containerPort: 80
 EOF
 ```
-Note the pod name as well the READY 1/1 state. 
+Note the pod name as well as the READY 1/1 state. 
 This 1/1 actually indicates the number of running containers in the pod.
 
 ```
