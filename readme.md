@@ -167,16 +167,34 @@ In order to demonstrate the behavior, let's reset out deployment.
 ```
 kubectl delete deploy nginx-deployment
 kubectl apply -f nginx-deployment.yaml
-
 ```
 ```
-kubectl debug -it $PODNAME  --image=xxradar/hackon --copy-to=my-debugger 
-At the stage the pod is copied into pod my-debugger and a contaier is attached ... 2/2
+kubectl get po --selector app=nginx
 
-NAME                  READY   STATUS    RESTARTS   AGE
-my-debugger           2/2     Running   0          30s
-www-6d49b97f5-4s7q9   1/1     Running   0          48m
+NAME                                READY   STATUS    RESTARTS   AGE
+nginx-deployment-7848d4b86f-6qzm9   1/1     Running   0          2m11s
+nginx-deployment-7848d4b86f-xztfq   1/1     Running   0          2m11s
+nginx-deployment-7848d4b86f-g6md9   1/1     Running   0          2m11s
+```
+```
+export PODNAME=nginx-deployment-7848d4b86f-6qzm9
 
-kubectl describe po my-debugger
+kubectl debug -it $PODNAME  --image=xxradar/hackon --copy-to=my-debugger
+
+Defaulting debug container name to debugger-h2pdm.
+
+
+If you don't see a command prompt, try pressing enter.
+
+root@my-debugger:/#
+```
+At the stage the pod is copied into pod my-debugger and a container is attached. You can verify this in a different terminal
+```
+kubectl get po
+NAME                                READY   STATUS             RESTARTS   AGE
+nginx-deployment-7848d4b86f-6qzm9   1/1     Running            0          5m23s
+nginx-deployment-7848d4b86f-xztfq   1/1     Running            0          5m23s
+nginx-deployment-7848d4b86f-g6md9   1/1     Running            0          5m23s
+my-debugger                         2/2     Running            0          2m9s
 ```
 
