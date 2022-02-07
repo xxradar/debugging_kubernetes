@@ -179,7 +179,7 @@ nginx-deployment-7848d4b86f-g6md9   1/1     Running   0          2m11s
 ```
 export PODNAME=nginx-deployment-7848d4b86f-6qzm9
 ```
-
+```
 kubectl debug -it $PODNAME  --image=xxradar/hackon --copy-to=my-debugger
 
 Defaulting debug container name to debugger-h2pdm.
