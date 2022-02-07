@@ -36,7 +36,7 @@ Note the pod name as well as the READY 1/1 state.
 This 1/1 actually indicates the number of running containers in the pod.
 
 ```
-% kubectl get po --selector app=nginx
+kubectl get po --selector app=nginx
 NAME                                READY   STATUS    RESTARTS   AGE
 nginx-deployment-7848d4b86f-sp6q5   1/1     Running   0          19s
 nginx-deployment-7848d4b86f-672tn   1/1     Running   0          19s
@@ -57,7 +57,7 @@ spec:
 EOF
 ```
 ```
-% kubectl patch deploy nginx-deployment --patch "$(cat patch.yaml)"
+kubectl patch deploy nginx-deployment --patch "$(cat patch.yaml)"
 ```
 ```
  kubectl get po --selector app=nginx
