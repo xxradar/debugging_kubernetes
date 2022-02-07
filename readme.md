@@ -1,8 +1,8 @@
 ### Essential POD behaviour
 
 Pods are the fundamental building block of Kubernetes applications. 
-Pods are disposable and replaceabl. You cannot add a container to a running Pod for examplel 
-When you try to update or patch running pod, the pod is terminated and a new one is deployed.
+Pods are disposable and replaceabl. You cannot add a container to a running Pod for example to troubleshoot a problem. 
+When you try to update or patch a running pod, the pod is terminated and a new one is deployed.
 
 This behavior can be illustrated.
 ```
