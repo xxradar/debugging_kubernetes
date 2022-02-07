@@ -1,4 +1,4 @@
-### Understanding ephemeral containers
+### Essential POD behaviour
 
 Pods are the fundamental building block of Kubernetes applications. 
 Pods are disposable and replaceabl. You cannot add a container to a running Pod for examplel 
