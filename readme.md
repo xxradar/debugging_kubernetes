@@ -181,12 +181,8 @@ export PODNAME=nginx-deployment-7848d4b86f-6qzm9
 ```
 ```
 kubectl debug -it $PODNAME  --image=xxradar/hackon --copy-to=my-debugger
-
 Defaulting debug container name to debugger-h2pdm.
-
-
 If you don't see a command prompt, try pressing enter.
-
 root@my-debugger:/#
 ```
 At this stage the pod is copied. A new pod `my-debugger` is started and a container with the specified `image` is attached . 
