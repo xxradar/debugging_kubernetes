@@ -8,7 +8,7 @@ This behavior can be illustrated.
 
 Let's deploy a few `nginx` pods ...
 ```
-kubectl <<EOF >nginx-deployment.yaml
+cat <<EOF >nginx-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
