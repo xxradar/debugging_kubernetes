@@ -184,6 +184,9 @@ nginx-deployment-7848d4b86f-g6md9   1/1     Running   0          2m11s
 ```
 export PODNAME=nginx-deployment-7848d4b86f-6qzm9
 ```
+
+Ephemeral containers ... prereq + small describtion ....
+
 ```
 kubectl debug -it $PODNAME  --image=xxradar/hackon --copy-to=my-debugger
 Defaulting debug container name to debugger-h2pdm.
@@ -379,3 +382,13 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 15:28:29.970405 IP 192.168.228.0.42704 > 192.168.172.172.80: Flags [.], ack 1, win 489, options [nop,nop,TS val 3815764349 ecr 2005209487], length 0
 15:28:29.970525 IP 192.168.228.0.42704 > 192.168.172.172.80: Flags [P.], seq 1:80, ack 1, win 489, options [nop,nop,TS val 3815764349 ecr 2005209487], length 79: HTTP: GET / HTTP/1.1
 ```
+
+### Accessing a node
+You can access a specific node (w/o the need for SSH) ... 
+kubectl debug node/ip-10-1-2-55 -it  --image xxradar/hackon
+...
+ps aux
+...
+Accessing host filesystem
+cd /host/home/ubuntu/
+...
