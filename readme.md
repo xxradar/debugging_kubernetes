@@ -371,5 +371,11 @@ cat nginx.conf
 ```
 When you're debug container image has for example `tcpdump` installed, you can sniff traffic in a running pod !
 ```
-tcpdump -n port 80 -A
+root@nginx-deployment-74d589986c-5bmgh:~# tcpdump -n port 80
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+15:28:29.970033 IP 192.168.228.0.42704 > 192.168.172.172.80: Flags [S], seq 3769776304, win 62587, options [mss 8941,sackOK,TS val 3815764348 ecr 0,nop,wscale 7], length 0
+15:28:29.970072 IP 192.168.172.172.80 > 192.168.228.0.42704: Flags [S.], seq 3784113359, ack 3769776305, win 62503, options [mss 8941,sackOK,TS val 2005209487 ecr 3815764348,nop,wscale 7], length 0
+15:28:29.970405 IP 192.168.228.0.42704 > 192.168.172.172.80: Flags [.], ack 1, win 489, options [nop,nop,TS val 3815764349 ecr 2005209487], length 0
+15:28:29.970525 IP 192.168.228.0.42704 > 192.168.172.172.80: Flags [P.], seq 1:80, ack 1, win 489, options [nop,nop,TS val 3815764349 ecr 2005209487], length 79: HTTP: GET / HTTP/1.1
 ```
