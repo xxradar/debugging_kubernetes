@@ -232,4 +232,7 @@ The folowing line will add an ephemeral container to an existing pod WITHOUT re-
 ```
 kubectl debug -it nginx-deployment-7848d4b86f-pjd8b --image=xxradar/hackon  -c debug -- bash
 ```
-As we look closer, a container is added to an existing pod and only shares the namespace (actually the /pause container)
+As we look closer, a container called `debug` is added to an existing pod and shares the namespace (actually the /pause container)
+```
+ls ....
+```
