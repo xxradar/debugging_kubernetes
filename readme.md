@@ -220,6 +220,14 @@ Reset the previous deployment
 ```
 kubectl rollout undo deploy/nginx-deployment
 ```
+```
+kubectl get po --selector app=nginx
+
+NAME                                READY   STATUS    RESTARTS   AGE
+nginx-deployment-7848d4b86f-rz6fx   1/1     Running   0          6m8s
+nginx-deployment-7848d4b86f-pjd8b   1/1     Running   0          6m5s
+nginx-deployment-7848d4b86f-mrl4t   1/1     Running   0          6m3s
+```
 The folowing line will add an ephemeral container to an existing pod WITHOUT re-deploying the pods
 ```
 kubectl debug -it nginx-deployment-7848d4b86f-pjd8b --image=xxradar/hackon  -c debug -- bash
