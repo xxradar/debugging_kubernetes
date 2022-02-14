@@ -215,6 +215,7 @@ root        41  0.2  0.0   4116  3408 pts/0    Ss   19:32   0:00 bash
 root        51  0.0  0.0   5888  2844 pts/0    R+   19:32   0:00 ps aux
 root@my-debugger2:/#
 ```
+### Adding an ephemeral container to an existing pod
 
 
 
