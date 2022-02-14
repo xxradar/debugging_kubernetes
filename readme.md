@@ -268,3 +268,104 @@ nginx-deployment-74d589986c-m5k2d   1/1     Running   0          9m19s
 nginx-deployment-74d589986c-pdcnl   1/1     Running   0          9m19s
 nginx-deployment-74d589986c-whhcq   1/1     Running   0          9m19s
 ```
+To find more detail, we need to drill to the pod level and find the `Ephemeral Containers` section.
+```
+kubectl describe po nginx-deployment-74d589986c-m5k2d
+Name:         nginx-deployment-74d589986c-m5k2d
+Namespace:    default
+Priority:     0
+Node:         ip-10-1-2-180/10.1.2.180
+Start Time:   Mon, 14 Feb 2022 14:52:26 +0000
+Labels:       app=nginx
+              pod-template-hash=74d589986c
+Annotations:  cni.projectcalico.org/containerID: 9d6cb4f2966e0b25090e10f5b6af6433b67fd8f2b21a94a8d09129645e6d9cbb
+              cni.projectcalico.org/podIP: 192.168.172.162/32
+              cni.projectcalico.org/podIPs: 192.168.172.162/32
+Status:       Running
+IP:           192.168.172.162
+IPs:
+  IP:           192.168.172.162
+Controlled By:  ReplicaSet/nginx-deployment-74d589986c
+Containers:
+  nginx:
+    Container ID:   containerd://792271189b20e28b291bd19261249296a1dd2a5be7573966ba9d268e4b6030d2
+    Image:          nginx
+    Image ID:       docker.io/library/nginx@sha256:2834dc507516af02784808c5f48b7cbe38b8ed5d0f4837f16e78d00deb7e7767
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Mon, 14 Feb 2022 14:52:28 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-8jb29 (ro)
+Ephemeral Containers:
+  debug:
+    Container ID:  containerd://c1a73864b5fd1ec2de53c1e6f3e9dc3a75e315508b4be53f72f1bfbfec1b321c
+    Image:         xxradar/hackon
+    Image ID:      docker.io/xxradar/hackon@sha256:0e90f1b9adf1a1608390c22f81531802257a16bb30fb4bd2b58523c80072c7f6
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      bash
+    State:          Running
+      Started:      Mon, 14 Feb 2022 14:53:13 +0000
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:         <none>
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  kube-api-access-8jb29:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  11m   default-scheduler  Successfully assigned default/nginx-deployment-74d589986c-m5k2d to ip-10-1-2-180
+  Normal  Pulling    11m   kubelet            Pulling image "nginx"
+  Normal  Pulled     11m   kubelet            Successfully pulled image "nginx" in 893.906403ms
+  Normal  Created    11m   kubelet            Created container nginx
+  Normal  Started    11m   kubelet            Started container nginx
+  Normal  Pulling    10m   kubelet            Pulling image "xxradar/hackon"
+  Normal  Pulled     10m   kubelet            Successfully pulled image "xxradar/hackon" in 7.636289587s
+  Normal  Created    10m   kubelet            Created container debug
+  Normal  Started    10m   kubelet            Started container debug
+ubuntu@ip-10-1-2-12:~$
+```
+In the follwing example, we'll create an ephemeral container and share the process namespace of an existing container inside the pod.
+```
+$ kubectl debug -it nginx-deployment-74d589986c-96x5s --image=xxradar/hackon --target nginx -c debug -- bash
+Targeting container "nginx". If you don't see processes from this container it may be because the container runtime doesn't support this feature.
+If you don't see a command prompt, try pressing enter.
+root@nginx-deployment-74d589986c-96x5s:/# ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0   8848  5400 ?        Ss   15:09   0:00 nginx: master process nginx -g daemon off;
+tcpdump     31  0.0  0.0   9236  2476 ?        S    15:09   0:00 nginx: worker process
+tcpdump     32  0.0  0.0   9236  2476 ?        S    15:09   0:00 nginx: worker process
+tcpdump     33  0.0  0.0   9236  2476 ?        S    15:09   0:00 nginx: worker process
+tcpdump     34  0.0  0.0   9236  2476 ?        S    15:09   0:00 nginx: worker process
+root        35  0.0  0.0   4108  3448 pts/0    Ss   15:10   0:00 bash
+root        43  0.0  0.0   5880  2848 pts/0    R+   15:10   0:00 ps aux
+```
+A trick you can apply to accessing the files in the `nginx` container is via 
+```
+cd /proc/1/root/etc/nginx
+```
+```
+cat nginx.conf 
+...
+```
