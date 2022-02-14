@@ -222,17 +222,49 @@ kubectl rollout undo deploy/nginx-deployment
 ```
 ```
 kubectl get po --selector app=nginx
-
-NAME                                READY   STATUS    RESTARTS   AGE
-nginx-deployment-7848d4b86f-rz6fx   1/1     Running   0          6m8s
-nginx-deployment-7848d4b86f-pjd8b   1/1     Running   0          6m5s
-nginx-deployment-7848d4b86f-mrl4t   1/1     Running   0          6m3s
+NAME                                READY   STATUS              RESTARTS   AGE
+nginx-deployment-74d589986c-m5k2d   1/1     Running             0          8s
+nginx-deployment-74d589986c-pdcnl   1/1     Running             0          8s
+nginx-deployment-74d589986c-whhcq   1/1     Running             0          8s  
 ```
 The folowing line will add an ephemeral container to an existing pod WITHOUT re-deploying the pods
 ```
-kubectl debug -it nginx-deployment-7848d4b86f-pjd8b --image=xxradar/hackon  -c debug -- bash
+kubectl debug -it nginx-deployment-74d589986c-m5k2d  --image=xxradar/hackon  -c debug -- bash
 ```
-As we look closer, a container called `debug` is added to an existing pod and shares the namespace (actually the /pause container)
+As we look closer, a container called `debug` is added to an existing pod and shares the network namespace.
 ```
-ls ....
+root@nginx-deployment-74d589986c-m5k2d:/# ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0   4236  3476 pts/0    Ss   14:53   0:00 bash
+root        15  0.0  0.0   5880  2944 pts/0    R+   14:59   0:00 ps aux
+
+root@nginx-deployment-74d589986c-m5k2d:/# ifconfig
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 8981
+        inet 192.168.172.162  netmask 255.255.255.255  broadcast 0.0.0.0
+        inet6 fe80::c466:8aff:feca:e002  prefixlen 64  scopeid 0x20<link>
+        ether c6:66:8a:ca:e0:02  txqueuelen 0  (Ethernet)
+        RX packets 5  bytes 446 (446.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 12  bytes 936 (936.0 B)
+        TX errors 0  dropped 1 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+root@nginx-deployment-74d589986c-m5k2d:/#
+```
+You can verify in a second terminal and notice that the pod is NOT restarted, neither did the READY state change.<br>
+The deployment declaration is not changed neither.
+```
+kubectl get po --selector app=nginx
+NAME                                READY   STATUS    RESTARTS   AGE
+nginx-deployment-74d589986c-m5k2d   1/1     Running   0          9m19s
+nginx-deployment-74d589986c-pdcnl   1/1     Running   0          9m19s
+nginx-deployment-74d589986c-whhcq   1/1     Running   0          9m19s
 ```
