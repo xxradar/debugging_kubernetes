@@ -64,7 +64,7 @@ EOF
 kubectl patch deploy nginx-deployment --patch "$(cat patch.yaml)"
 ```
 ```
- kubectl get po --selector app=nginx
+kubectl get po --selector app=nginx
 
 NAME                                READY   STATUS        RESTARTS   AGE
 nginx-deployment-89cfdb59c-x7z94    2/2     Running       0          20s
