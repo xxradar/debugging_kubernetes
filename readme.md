@@ -74,6 +74,10 @@ nginx-deployment-89cfdb59c-mdr89    2/2     Running       0          12s
 As you can see the running pods are terminated and replaced by new pods. Also note the 2/2 indicating we have two running containers in the pod.
 We can verify this
 ```
+kubectl get deploy/nginx-deployment -o jsonpath='{.spec.template.spec.containers[:2].image}'
+```
+or 
+```
 % kubectl describe po nginx-deployment-89cfdb59c-x7z94
 Name:         nginx-deployment-89cfdb59c-x7z94
 Namespace:    default
