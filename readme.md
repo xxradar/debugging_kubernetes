@@ -79,7 +79,7 @@ kubectl get deploy/nginx-deployment -o jsonpath='{.spec.template.spec.containers
 ```
 or 
 ```
-% kubectl describe po nginx-deployment-89cfdb59c-x7z94
+kubectl describe po nginx-deployment-89cfdb59c-x7z94
 Name:         nginx-deployment-89cfdb59c-x7z94
 Namespace:    default
 Priority:     0
