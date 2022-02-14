@@ -369,3 +369,7 @@ cd /proc/1/root/etc/nginx
 cat nginx.conf 
 ...
 ```
+When you're debug container image has for example `tcpdump` installed, you can sniff traffic in a running pod !
+```
+tcpdump -n port 80 -A
+```
