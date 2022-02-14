@@ -216,6 +216,12 @@ root        51  0.0  0.0   5888  2844 pts/0    R+   19:32   0:00 ps aux
 root@my-debugger2:/#
 ```
 ### Adding an ephemeral container to an existing pod
-
-
-
+Reset the previous deployment
+```
+kubectl rollout undo deploy/nginx-deployment
+```
+The folowing line will add an ephemeral container to an existing pod WITHOUT re-deploying the pods
+```
+kubectl debug -it nginx-deployment-7848d4b86f-pjd8b --image=xxradar/hackon  -c debug -- bash
+```
+As we look closer, a container is added to an existing pod and only shares the namespace (actually the /pause container)
