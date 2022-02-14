@@ -1,4 +1,4 @@
-## Kubect debug and ephemeral containers
+## Kubectl debug and ephemeral containers
 ### Essential POD behaviour
 
 Pods are the fundamental building block of Kubernetes applications. 
@@ -36,7 +36,7 @@ EOF
 ```
 kubectl apply -f nginx-deployment.yaml
 ```
-Note the pod name as well as the READY 1/1 state. 
+Note the pod name as well as the `READY 1/1` state. 
 This 1/1 actually indicates the number of running containers in the pod.
 
 ```
@@ -72,8 +72,8 @@ nginx-deployment-89cfdb59c-4zzjl    2/2     Running       0          16s
 nginx-deployment-7848d4b86f-672tn   0/1     Terminating   0          64s
 nginx-deployment-89cfdb59c-mdr89    2/2     Running       0          12s
 ```
-As you can see the running pods are terminated and replaced by new pods. Also note the 2/2 indicating we have two running containers in the pod.
-We can verify this
+As you can see the running pods are terminated and replaced by new pods. Also note the `2/2` indicating we have two running containers in the pod.
+We can list the container images like this
 ```
 kubectl get deploy/nginx-deployment -o jsonpath='{.spec.template.spec.containers[:2].image}'
 ```
