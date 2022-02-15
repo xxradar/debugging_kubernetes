@@ -37,7 +37,7 @@ EOF
 kubectl apply -f nginx-deployment.yaml
 ```
 Note the pod name as well as the `READY 1/1` state. 
-This `1/1` actually indicates the number of running containers in the pod.
+This `1/1` indicates the number of running containers in the pod.
 ```
 kubectl get po --selector app=nginx
 NAME                                READY   STATUS    RESTARTS   AGE
@@ -153,10 +153,10 @@ Events:
   Normal  Started    7m37s  kubelet            Started container nginx
  ```
 Sometimes it's necessary to inspect the state of an existing pod.
-In order to examine a running pod, you can use the `kubectl exec` mechanism. <br>
-This works fine to troublehshoot issues, except that secure container images do not always (and should not) contain debugging tools (distroless or hardened images) and runtime security solutions might block installing them.
+To examine a running pod, you can use the `kubectl exec` mechanism. <br>
+This works fine to troubleshoot issues, except that secure container images do not always (and should not) contain debugging tools (distroless or hardened images) and runtime security solutions might block installing them.
 
-The example of patching containers might be a solution but as already stated, the pods are replaced and the second container only shares the pods networking namespace by default.<br>
+The example of patching containers might be a solution but as already stated, the pods are replaced, and the second container only shares the pods networking namespace by default.<br>
 
 To troubleshoot a hard-to-reproduce bug, this might be challenging.
 
@@ -167,7 +167,7 @@ To troubleshoot a hard-to-reproduce bug, this might be challenging.
   * Create a new pod that runs in the node's host namespaces and can access the node's filesystem.
 
 ### Usecase 1: Create a copy of an existing pod
-In order to demonstrate the behavior, let's reset out deployment.
+To demonstrate the behavior, let's reset out deployment.
 ```
 kubectl delete deploy nginx-deployment
 kubectl apply -f nginx-deployment.yaml
@@ -191,7 +191,7 @@ Defaulting debug container name to debugger-h2pdm.
 If you don't see a command prompt, try pressing enter.
 root@my-debugger:/#
 ```
-At this stage the pod is copied. A new pod `my-debugger` is started and a container with the specified `image` is attached . 
+At this stage the pod is copied. A new pod `my-debugger` is started and a container with the specified `image` is attached. 
 You can verify this in a different terminal.
 ```
 kubectl get po
@@ -202,7 +202,7 @@ nginx-deployment-7848d4b86f-g6md9   1/1     Running            0          5m23s
 my-debugger                         2/2     Running            0          2m9s
 ```
 We only shared the network namespace in this example.<br>
-This is great to test the application over the shared networking stack, but does not grant us access to the process and filesystem. <br>
+This is great to test the application over the shared networking stack but does not grant us access to the process and filesystem. <br>
 Sharing the process namespace can be obtained via the `--share-processes=true` flag.
 ```
 kubectl debug  -it $PODNAME --image=xxradar/hackon  --copy-to=my-debugger2 --share-processes=true -- bash
@@ -234,7 +234,7 @@ nginx-deployment-74d589986c-m5k2d   1/1     Running             0          8s
 nginx-deployment-74d589986c-pdcnl   1/1     Running             0          8s
 nginx-deployment-74d589986c-whhcq   1/1     Running             0          8s  
 ```
-The folowing line will add an ephemeral container to an existing pod WITHOUT re-deploying the pods
+The following line will add an ephemeral container to an existing pod WITHOUT re-deploying the pods
 ```
 kubectl debug -it nginx-deployment-74d589986c-m5k2d  --image=xxradar/hackon  -c debug -- bash
 ```
@@ -353,7 +353,7 @@ Events:
   Normal  Started    10m   kubelet            Started container debug
 ubuntu@ip-10-1-2-12:~$
 ```
-In the follwing example, we'll create an ephemeral container and share the process namespace of an existing container inside the pod.
+In the following example, we'll create an ephemeral container and share the process namespace of an existing container inside the pod.
 ```
 $ kubectl debug -it nginx-deployment-74d589986c-96x5s --image=xxradar/hackon --target nginx -c debug -- bash
 Targeting container "nginx". If you don't see processes from this container it may be because the container runtime doesn't support this feature.
@@ -376,7 +376,7 @@ cd /proc/1/root/etc/nginx
 cat nginx.conf 
 ...
 ```
-When you're debug container image has for example `tcpdump` installed, you can sniff traffic in a running pod !
+When you're debug container image has for example `tcpdump` installed, you can sniff traffic in a running pod!
 ```
 root@nginx-deployment-74d589986c-5bmgh:~# tcpdump -n port 80
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
@@ -387,9 +387,9 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 15:28:29.970525 IP 192.168.228.0.42704 > 192.168.172.172.80: Flags [P.], seq 1:80, ack 1, win 489, options [nop,nop,TS val 3815764349 ecr 2005209487], length 79: HTTP: GET / HTTP/1.1
 ```
 
-### Usecae 3: Accessing a node
+### Usecase 3: Accessing a node
 Inspecting a node typically requires SSH access and requires private/public keys to access the node. The node OS should also have all the debugging tools installed.
-But maybe, there is a simpeler solution!<br><br>
+But maybe, there is a simpler solution!<br><br>
 First pick a node
 ```
 kubectl get no
