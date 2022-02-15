@@ -219,7 +219,7 @@ root        51  0.0  0.0   5888  2844 pts/0    R+   19:32   0:00 ps aux
 root@my-debugger2:/#
 ```
 ### Adding an ephemeral container to an existing pod
-Ephemeral containers were introduced in Kubernetes v1.23 beta and as such as available by default. Earlier versions of K8S will require you to enable feature gates [Featrure Gates for Ephemeral Containers](https://xxradar.medium.com/how-to-tcpdump-using-ephemeral-containers-in-kubernetes-d066e6855785). <br>
+Ephemeral containers were introduced in Kubernetes v1.23 beta and as such available by default. Earlier versions of K8S will require you to enable feature gates [Featrure Gates for Ephemeral Containers](https://xxradar.medium.com/how-to-tcpdump-using-ephemeral-containers-in-kubernetes-d066e6855785). <br>
 More about this kind of containers can be found [here](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/#understanding-ephemeral-containers).
 So let's give it a try <br.
 First, reset the previous deployment
