@@ -221,7 +221,8 @@ root@my-debugger2:/#
 ### Adding an ephemeral container to an existing pod
 Ephemeral containers were introduced in Kubernetes v1.23 beta and as such available by default. Earlier versions of K8S will require you to enable feature gates [Featrure Gates for Ephemeral Containers](https://xxradar.medium.com/how-to-tcpdump-using-ephemeral-containers-in-kubernetes-d066e6855785). <br>
 More about this kind of containers can be found [here](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/#understanding-ephemeral-containers).
-So let's give it a try <br.
+*Note: Ephemeral containers cannot be removed from an existing pod*
+So let's give it a try <br>.
 First, reset the previous deployment
 ```
 kubectl rollout undo deploy/nginx-deployment
