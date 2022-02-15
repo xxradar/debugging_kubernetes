@@ -166,7 +166,7 @@ To troubleshoot a hard-to-reproduce bug, this might be challenging.
   * Add an ephemeral container to an already running pod, for example to add debugging utilities without restarting the pod.
   * Create a new pod that runs in the node's host namespaces and can access the node's filesystem.
 
-### Create a copy of an existing pod
+### Usecase 1: Create a copy of an existing pod
 In order to demonstrate the behavior, let's reset out deployment.
 ```
 kubectl delete deploy nginx-deployment
@@ -218,11 +218,11 @@ root        41  0.2  0.0   4116  3408 pts/0    Ss   19:32   0:00 bash
 root        51  0.0  0.0   5888  2844 pts/0    R+   19:32   0:00 ps aux
 root@my-debugger2:/#
 ```
-### Adding an ephemeral container to an existing pod
+### Usecase 2: Adding an ephemeral container to an existing pod
 Ephemeral containers were introduced in Kubernetes v1.23 beta and as such available by default. Earlier versions of K8S will require you to enable feature gates [Feature Gates for Ephemeral Containers](https://xxradar.medium.com/how-to-tcpdump-using-ephemeral-containers-in-kubernetes-d066e6855785). <br>
 More about this kind of containers can be found [here](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/#understanding-ephemeral-containers).<br>
-*Note: Ephemeral containers cannot be removed from an existing pod*
-So let's give it a try <br>.
+*Note: Ephemeral containers cannot be removed from an existing pod*<br>
+So let's give it a try.<br>
 First, reset the previous deployment
 ```
 kubectl rollout undo deploy/nginx-deployment
