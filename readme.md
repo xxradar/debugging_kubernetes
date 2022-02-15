@@ -410,7 +410,7 @@ root         3  0.0  0.0      0     0 ?        I<   Feb14   0:00 [rcu_gp]
 root         4  0.0  0.0      0     0 ?        I<   Feb14   0:00 [rcu_par_gp]
 ...
 ```
-You can also access the host filesystem
+You can also access the host filesystem. The host file system is mounted in the pod under the `/host` directory.
 ```
 root@ip-10-1-2-180:/host/etc# cd /host/etc/
 root@ip-10-1-2-180:/host/etc# ls -la
