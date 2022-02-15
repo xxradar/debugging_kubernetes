@@ -221,7 +221,7 @@ root@my-debugger2:/#
 ### Usecase 2: Adding an ephemeral container to an existing pod
 Ephemeral containers were introduced in Kubernetes v1.23 beta and as such available by default. Earlier versions of K8S will require you to enable feature gates [Feature Gates for Ephemeral Containers](https://xxradar.medium.com/how-to-tcpdump-using-ephemeral-containers-in-kubernetes-d066e6855785). <br>
 More about this kind of containers can be found [here](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/#understanding-ephemeral-containers).<br>
-*Note: Ephemeral containers cannot be removed from an existing pod*<br>
+*Note: Ephemeral containers cannot be removed from an existing pod.*<br><br>
 So let's give it a try.<br>
 First, reset the previous deployment
 ```
@@ -387,12 +387,40 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 15:28:29.970525 IP 192.168.228.0.42704 > 192.168.172.172.80: Flags [P.], seq 1:80, ack 1, win 489, options [nop,nop,TS val 3815764349 ecr 2005209487], length 79: HTTP: GET / HTTP/1.1
 ```
 
-### Accessing a node
-You can access a specific node (w/o the need for SSH) ... 
-kubectl debug node/ip-10-1-2-55 -it  --image xxradar/hackon
+### Usecae 3: Accessing a node
+Inspecting a node typically requires SSH access and requires private/public keys to access the node. The node OS should also have all the debugging tools installed.
+But maybe, there is a simpeler solution!<br><br>
+First pick a node
+```
+kubectl get no
+NAME            STATUS   ROLES                  AGE   VERSION
+ip-10-1-2-12    Ready    control-plane,master   13d   v1.23.3
+ip-10-1-2-180   Ready    <none>                 13d   v1.23.3
+ip-10-1-2-26    Ready    <none>                 13d   v1.23.3```
+```
+```
+kubectl debug node/ip-10-1-2-180  -it  --image xxradar/hackon
+Creating debugging pod node-debugger-ip-10-1-2-180-6htp2 with container debugger on node ip-10-1-2-180.
+If you don't see a command prompt, try pressing enter.
+root@ip-10-1-2-180:/# ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0 225384  9048 ?        Ss   Feb14   1:02 /sbin/init
+root         2  0.0  0.0      0     0 ?        S    Feb14   0:00 [kthreadd]
+root         3  0.0  0.0      0     0 ?        I<   Feb14   0:00 [rcu_gp]
+root         4  0.0  0.0      0     0 ?        I<   Feb14   0:00 [rcu_par_gp]
 ...
-ps aux
+```
+You can also access the host filesystem
+```
+root@ip-10-1-2-180:/host/etc# cd /host/etc/
+root@ip-10-1-2-180:/host/etc# ls -la
+total 824
+drwxr-xr-x 92 root root    4096 Feb  3 06:39 .
+drwxr-xr-x 23 root root    4096 Feb 14 14:51 ..
+-rw-------  1 root root       0 Jan 12  2020 .pwd.lock
+drwxr-xr-x  3 root root    4096 Jan 12  2020 NetworkManager
+drwxr-xr-x  4 root root    4096 Jan 12  2020 X11
+drwxr-xr-x  4 root root    4096 Jan 12  2020 acpi
+-rw-r--r--  1 root root    3028 Jan 12  2020 adduser.conf
 ...
-Accessing host filesystem
-cd /host/home/ubuntu/
-...
+```
