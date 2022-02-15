@@ -424,3 +424,9 @@ drwxr-xr-x  4 root root    4096 Jan 12  2020 acpi
 -rw-r--r--  1 root root    3028 Jan 12  2020 adduser.conf
 ...
 ```
+### Recap
+
+Let's do a recap on what you've learned in this article:
+
+ * `kubectl debug` allows for easy debugging of pods by copying or adding an ephemeral container
+ * `kubectl debug` also allows for easy debugging of the K8S nodes without the need to install additional tools.
