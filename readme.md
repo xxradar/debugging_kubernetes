@@ -1,8 +1,8 @@
 ## Kubectl debug and ephemeral containers
-### Essential POD behaviour
+### Introduction
 
 Pods are the fundamental building block of Kubernetes applications. 
-Pods are disposable and  replaceable. You cannot add a container to a running Pod for example to troubleshoot a problem. 
+Pods are disposable and replaceable. You cannot add a container (until very recently) to a running Pod for example to troubleshoot a problem. 
 When you try to update or patch a running pod, the pod is terminated and a new one is deployed.
 
 This behavior can be illustrated.
@@ -37,8 +37,7 @@ EOF
 kubectl apply -f nginx-deployment.yaml
 ```
 Note the pod name as well as the `READY 1/1` state. 
-This 1/1 actually indicates the number of running containers in the pod.
-
+This `1/1` actually indicates the number of running containers in the pod.
 ```
 kubectl get po --selector app=nginx
 NAME                                READY   STATUS    RESTARTS   AGE
@@ -153,11 +152,11 @@ Events:
   Normal  Created    7m37s  kubelet            Created container nginx
   Normal  Started    7m37s  kubelet            Started container nginx
  ```
+Sometimes it's necessary to inspect the state of an existing pod.
+In order to examine a running pod, you can use the `kubectl exec` mechanism. <br>
+This works fine to troublehshoot issues, except that secure container images do not always (and should not) contain debugging tools (distroless or hardened images) and runtime security solutions might block installing them.
 
-Sometimes it's necessary to inspect the state of an existing Pod.
-In order to examine a running pod, you can use the `kubectl exec` mechanism. This works fine to troublehshoot issues, except that secure container images do not contain debugging tools (distroless or hardened images) amd runtime security solutions might block installing them.
-
-The example of patching containers might be a solution but as already stated, the pods are replaced and the second container only shares the pods networking namespace by default.
+The example of patching containers might be a solution but as already stated, the pods are replaced and the second container only shares the pods networking namespace by default.<br>
 
 To troubleshoot a hard-to-reproduce bug, this might be challenging.
 
@@ -173,6 +172,7 @@ In order to demonstrate the behavior, let's reset out deployment.
 kubectl delete deploy nginx-deployment
 kubectl apply -f nginx-deployment.yaml
 ```
+Verify if everything is up and running again.
 ```
 kubectl get po --selector app=nginx
 
@@ -181,12 +181,10 @@ nginx-deployment-7848d4b86f-6qzm9   1/1     Running   0          2m11s
 nginx-deployment-7848d4b86f-xztfq   1/1     Running   0          2m11s
 nginx-deployment-7848d4b86f-g6md9   1/1     Running   0          2m11s
 ```
+For simplicity, let's put the pod name in an environment varaible.
 ```
 export PODNAME=nginx-deployment-7848d4b86f-6qzm9
 ```
-
-Ephemeral containers ... prereq + small describtion ....
-
 ```
 kubectl debug -it $PODNAME  --image=xxradar/hackon --copy-to=my-debugger
 Defaulting debug container name to debugger-h2pdm.
@@ -203,7 +201,9 @@ nginx-deployment-7848d4b86f-xztfq   1/1     Running            0          5m23s
 nginx-deployment-7848d4b86f-g6md9   1/1     Running            0          5m23s
 my-debugger                         2/2     Running            0          2m9s
 ```
-We only shared the network namespace in this example. This is great to test the application over the shared networking stack, but does not grant us access to the process and filesystem. Sharing the process namespace can be obtained via the `--share-processes=true` flag.
+We only shared the network namespace in this example.<br>
+This is great to test the application over the shared networking stack, but does not grant us access to the process and filesystem. <br>
+Sharing the process namespace can be obtained via the `--share-processes=true` flag.
 ```
 kubectl debug  -it $PODNAME --image=xxradar/hackon  --copy-to=my-debugger2 --share-processes=true -- bash
 Defaulting debug container name to debugger-w9s48.
@@ -219,6 +219,9 @@ root        51  0.0  0.0   5888  2844 pts/0    R+   19:32   0:00 ps aux
 root@my-debugger2:/#
 ```
 ### Adding an ephemeral container to an existing pod
+Ephemeral containers were introduced in Kubernetes v1.23 beta and as such as available by default. Earlier versions of K8S will require you to enable feature gates [Featrure Gates for Ephemeral Containers](https://xxradar.medium.com/how-to-tcpdump-using-ephemeral-containers-in-kubernetes-d066e6855785). <br>
+
+
 Reset the previous deployment
 ```
 kubectl rollout undo deploy/nginx-deployment
