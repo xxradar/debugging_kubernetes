@@ -167,7 +167,7 @@ To troubleshoot a hard-to-reproduce bug, this might be challenging.
   * Create a new pod that runs in the node's host namespaces and can access the node's filesystem.
 
 ### Usecase 1: Create a copy of an existing pod
-To demonstrate the behavior, let's reset out deployment.
+To demonstrate the behavior, let's reset our deployment.
 ```
 kubectl delete deploy nginx-deployment
 kubectl apply -f nginx-deployment.yaml
