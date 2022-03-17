@@ -1,6 +1,6 @@
 ## Advanced debugging techniques in Kubernetes
 ### Introduction
-Pods are the fundamental building block of Kubernetes applications. They are the smallest, most basic deployable resource and represent a single instance of a running process. Pods are made of one or more containers sharing the network namespace, this includes the network interface, IP address, network ports and hostname.  Pods are disposable and replaceable.  Sometimes, you might want to add a container to a running pod for debugging puposes, but this is not as simple as it sounds. When you try to update or patch a running pod, the pod is terminated and a new one is deployed.
+Pods are the fundamental building block of Kubernetes applications. They are the smallest, most basic deployable resource and represent a single instance of a running process. Pods are made of one or more containers sharing the network namespace, this includes the network interface, IP address, network ports and hostname.  Sometimes, you might want to add a container to a running pod for debugging puposes, but this is not as simple as it sounds. When you try to update or patch a running pod, the pod is terminated and a new one is deployed.
 
 This behavior can be illustrated.
 
