@@ -234,7 +234,7 @@ root        51  0.0  0.0   5888  2844 pts/0    R+   19:32   0:00 ps aux
 root@my-debugger2:/#
 ```
 ### Usecase 2: Adding an ephemeral container to an existing pod
-Ephemeral containers were introduced in Kubernetes v1.23 beta and as such available by default. Earlier versions of K8S will require you to enable feature gates [Feature Gates for Ephemeral Containers](https://xxradar.medium.com/how-to-tcpdump-using-ephemeral-containers-in-kubernetes-d066e6855785). <br>
+Ephemeral containers were introduced in Kubernetes v1.23 as beta and as such available by default. Earlier versions of K8S will require you to enable feature gates [Feature Gates for Ephemeral Containers](https://xxradar.medium.com/how-to-tcpdump-using-ephemeral-containers-in-kubernetes-d066e6855785). <br>
 More about this kind of containers can be found [here](https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/#understanding-ephemeral-containers), but in short, ephemeral containers differ from other containers in that they lack guarantees for resources or execution, and they will never be automatically restarted, so they are not really appropriate for building applications. Also. ephemeral containers may not have ports, so fields such as ports, livenessProbe, readinessProbe are disallowed. The good news is that ephemeral containers are useful for interactive troubleshooting when `kubectl exec` is insufficient because a container has crashed or a container image doesn't include debugging utilities.
 
 *Note: Ephemeral containers cannot be removed from an existing pod.*<br><br>
