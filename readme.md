@@ -217,6 +217,10 @@ nginx-deployment-7848d4b86f-g6md9   1/1     Running            0          5m23s
 my-debugger                         2/2     Running            0          2m9s
 ```
 We only share the essential namespaces, but the most important in this example is the `netns`.<br>
+
+# add an example of curl 127.0.0.1
+
+
 This is great to test the application over the shared networking stack, but does not grant us access to the processes and filesystem. <br>
 Sharing the process namespace can be obtained via the `--share-processes=true` flag.
 ```
