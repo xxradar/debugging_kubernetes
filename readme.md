@@ -1,6 +1,6 @@
 ## Advanced debugging techniques in Kubernetes
 ### Introduction
-Pods are the fundamental building block of Kubernetes applications. They are the smallest, most basic deployable resource and can represent as little as a single instance of a running process. Pods are made of one or more containers sharing some specific Linux namespaces (`netns`, `utsns` and `ipcns`). That is why containers in a pod can share the network interface, IP address, network ports and hostname and communicate over `localhost` or the `127.0.0.1` IP address. On the other hand, containers inside the pod do not share the filesystem (`mntns`), nor can they see each other processes (`pidns`) by default.  Upi can visualize this by:
+Pods are the fundamental building block of Kubernetes applications. They are the smallest, most basic deployable resource and can represent as little as a single instance of a running process. Pods are made of one or more containers sharing some specific Linux namespaces (`netns`, `utsns` and `ipcns`). That is why containers in a pod can share the network interface, IP address, network ports and hostname and communicate over `localhost` or the `127.0.0.1` IP address. On the other hand, containers inside the pod do not share the filesystem (`mntns`), nor can they see each other processes (`pidns`) by default.  You can visualize this by:
 ```
 # Let's find the process id of an nginx process
 $ ps aux | grep -i nginx
@@ -17,6 +17,7 @@ $ sudo ps -ax -n -o pid,netns,utsns,ipcns,mntns,pidns,cmd | grep 4026532927
  6778 4026532927 4026532396 4026532397 4026532456 4026532457 nginx: worker process
 ```
 
+### Patching a pod deployment for debugging
 Sometimes, you might want to add a container to a running pod for debugging puposes, but this is not as simple as it sounds. When you try to update or patch a running pod to include an additional debugging container, the pod is terminated and a new one is deployed.
 
 This behavior can be illustrated.
