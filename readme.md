@@ -217,10 +217,33 @@ nginx-deployment-7848d4b86f-g6md9   1/1     Running            0          5m23s
 my-debugger                         2/2     Running            0          2m9s
 ```
 We only share the essential namespaces, but the most important in this example is the `netns`.<br>
+```
+root@my-debugger:/# curl 127.0.0.1
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
 
-# add an example of curl 127.0.0.1
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
 
-
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+root@my-debugger:/#
+```
 This is great to test the application over the shared networking stack, but does not grant us access to the processes and filesystem. <br>
 Sharing the process namespace can be obtained via the `--share-processes=true` flag.
 ```
