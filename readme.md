@@ -395,7 +395,7 @@ Events:
   Normal  Started    10m   kubelet            Started container debug
 ubuntu@ip-10-1-2-12:~$
 ```
-In the following example, we'll create an ephemeral container and share the process namespace of an existing container inside the pod.
+In the following example, we'll create an ephemeral container and share <b>the process namespace of an existing container</b> inside the pod.
 ```
 $ kubectl debug -it nginx-deployment-74d589986c-96x5s --image=xxradar/hackon --target nginx -c debug -- bash
 Targeting container "nginx". If you don't see processes from this container it may be because the container runtime doesn't support this feature.
@@ -410,7 +410,9 @@ tcpdump     34  0.0  0.0   9236  2476 ?        S    15:09   0:00 nginx: worker p
 root        35  0.0  0.0   4108  3448 pts/0    Ss   15:10   0:00 bash
 root        43  0.0  0.0   5880  2848 pts/0    R+   15:10   0:00 ps aux
 ```
-A trick you can apply to accessing the files in the `nginx` container is via 
+So, we added a debug container and made it have practically full access to `--target` container!
+We can push this ever further. <br>
+A trick you can apply to accessing the files in the `nginx` container is via the following directory:
 ```
 cd /proc/1/root/etc/nginx
 ```
@@ -418,7 +420,7 @@ cd /proc/1/root/etc/nginx
 cat nginx.conf 
 ...
 ```
-When you're debug container image has for example `tcpdump` installed, you can sniff traffic in a running pod!
+When you're debug container image has for example `tcpdump` installed, you can even sniff traffic inside a running pod!
 ```
 root@nginx-deployment-74d589986c-5bmgh:~# tcpdump -n port 80
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
