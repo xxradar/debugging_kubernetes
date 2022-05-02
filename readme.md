@@ -432,8 +432,8 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 ```
 
 ### Usecase 3: Accessing a node
-Inspecting a node typically requires SSH access and requires private/public keys to access the node. The node OS should also have all the debugging tools installed.
-But maybe, there is a simpler solution!<br><br>
+The first usecases discussed focus on debugging a troublesome pod. In some cases we might need to debug and troubleshoot the kuberetes node.
+Inspecting a node typically requires SSH access and requires probably private/public keys to access the node. The node OS should also have all the debugging tools installed. But maybe, there is a simpler solution!<br><br>
 First pick a node
 ```
 kubectl get no
@@ -442,6 +442,7 @@ ip-10-1-2-12    Ready    control-plane,master   13d   v1.23.3
 ip-10-1-2-180   Ready    <none>                 13d   v1.23.3
 ip-10-1-2-26    Ready    <none>                 13d   v1.23.3```
 ```
+`Kubectl debug` allows to easily spin up a pod including troubleshooting tools and gain access to the node itself.
 ```
 kubectl debug node/ip-10-1-2-180  -it  --image xxradar/hackon
 Creating debugging pod node-debugger-ip-10-1-2-180-6htp2 with container debugger on node ip-10-1-2-180.
