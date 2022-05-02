@@ -469,11 +469,10 @@ drwxr-xr-x  4 root root    4096 Jan 12  2020 acpi
 -rw-r--r--  1 root root    3028 Jan 12  2020 adduser.conf
 ...
 ```
-### Usecase4: kubectl trace for kernel observiliaty and tracing
+### Usecase4: kubectl trace for kernel observability and tracing
 A pretty cool and advanced way to troubleshoot pods or network related issues is by using eBPF.  eBPF implements observability, security, and networking functionality due to the kernel’s privileged ability to oversee and control the entire system. Check out eBPF [here](https://ebpf.io).
-
 To get started, feel free to checkout https://github.com/iovisor/bpftrace and https://github.com/iovisor/kubectl-trace.
-
+<br>
 First we need to install the `kubectl trace` plugin. This can be done through `krew` as a plugin manager.
 Check out this page https://krew.sigs.k8s.io/docs/user-guide/setup/install/ to find more information in the 'krew' plugin for 'kubectl'
 #### Install 'krew'
@@ -498,7 +497,7 @@ kubectl krew install trace
 ```
 ## Capturing pods connections
 ### Clone the bpftrace repo
-eBPF requires ebpf probes. We'll refrain from writing these probes ourselfes and use this superb repo with plenty of examples in this repo.
+eBPF requires ebpf probes. We'll refrain from writing these probes ourselfes and use this superb repo with plenty of examples.
 
 ```
 git clone https://github.com/iovisor/bpftrace.git
