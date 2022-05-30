@@ -1,5 +1,5 @@
 ## Advanced debugging techniques in Kubernetes
-### Introduction
+## Introduction
 Pods are the fundamental building block of Kubernetes applications. They are the smallest, most basic deployable resource and can represent as little as a single instance of a running process. Pods are made of one or more containers sharing some specific Linux namespaces (`netns`, `utsns` and `ipcns`). That is why containers in a pod can share the network interface, IP address, network ports and hostname and communicate over `localhost` or the `127.0.0.1` IP address. On the other hand, containers inside the pod do not share the filesystem (`mntns`), nor can they see each other processes (`pidns`) by default.  You can visualize this by:
 ```
 # Let's find the process id of an nginx process
@@ -17,7 +17,7 @@ $ sudo ps -ax -n -o pid,netns,utsns,ipcns,mntns,pidns,cmd | grep 4026532927
  6778 4026532927 4026532396 4026532397 4026532456 4026532457 nginx: worker process
 ```
 
-### Patching a pod deployment for debugging
+## Patching a pod deployment for debugging
 Sometimes, you might want to add a container to a running pod for debugging puposes, but this is not as simple as it sounds. When you try to update or patch a running pod to include an additional debugging container, the pod is terminated and a new one is deployed.
 
 This behavior can be illustrated.
@@ -175,7 +175,7 @@ The example of patching containers might be a solution but as already stated, th
 
 To troubleshoot a hard-to-reproduce bug, this might be challenging.
 
-### `kubectl debug` to the rescue
+## `kubectl debug` to the rescue
 `kubectl debug` might help us in a few different ways.
   * Create a copy of an existing pod (with certain attributes changed)
   * Add an ephemeral container to an already running pod, for example to add debugging utilities without restarting the pod.
@@ -432,7 +432,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 ```
 
 ### Usecase 3: Accessing a node
-The first usecases discussed focus on debugging a troublesome pod. In some cases we might need to debug and troubleshoot the kuberetes node.
+The first two usecases discussed focus on debugging a troublesome pod. In some cases we might need to debug and troubleshoot the kubernetes node.
 Inspecting a node typically requires SSH access and requires probably private/public keys to access the node. The node OS should also have all the debugging tools installed. But maybe, there is a simpler solution!<br><br>
 First pick a node
 ```
