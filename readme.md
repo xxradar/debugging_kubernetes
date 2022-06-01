@@ -470,7 +470,7 @@ drwxr-xr-x  4 root root    4096 Jan 12  2020 acpi
 ...
 ```
 
-## Introducing EBPF and @Ciliumproject Tetragone
+## Introducing EBPF and @Ciliumproject Tetragon
 ### What is EBPF ?
 eBPF is a revolutionary technology with origins in the Linux kernel that can run sandboxed programs in an operating system kernel. It is used to safely and efficiently extend the capabilities of the kernel without requiring to change kernel source code or load kernel modules. Please checkout https://ebpf.io/ for more detailed information. By allowing to run sandboxed programs within the operating system, application developers can run eBPF programs to add additional capabilities to the operating system at runtime. A lot of new intersting projects already adopted ebpf, avoiding coding skills to get most out of it. A lot of them are situated 'security observabilty' space. A project that is super interesting by @ciliumproject is https://github.com/cilium/tetragon. As stated on the github repo: "Cilium’s new Tetragon component enables powerful realtime, eBPF-based Security Observability and Runtime Enforcement. Tetragon detects and is able to react to security-significant events, such as process execution events, system call activity, I/O activity including network & file access." This project enhances security a lot, but the project is also extremely helpfull in anaylysing, understanding and debuging pod behavior in a kubernetes environment.
 
