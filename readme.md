@@ -472,11 +472,46 @@ drwxr-xr-x  4 root root    4096 Jan 12  2020 acpi
 
 ## Introducing EBPF and @Ciliumproject Tetragone
 ### What is EBPF ?
+eBPF is a revolutionary technology with origins in the Linux kernel that can run sandboxed programs in an operating system kernel. It is used to safely and efficiently extend the capabilities of the kernel without requiring to change kernel source code or load kernel modules. Please checkout https://ebpf.io/ for more detailed information. By allowing to run sandboxed programs within the operating system, application developers can run eBPF programs to add additional capabilities to the operating system at runtime. A lot of new intersting projects already adopted ebpf, avoiding coding skills to get most out of it. A lot of them are situated 'security observabilty' space. A project that is super interesting by @ciliumproject is https://github.com/cilium/tetragon. As stated on the github repo: "Cilium’s new Tetragon component enables powerful realtime, eBPF-based Security Observability and Runtime Enforcement. Tetragon detects and is able to react to security-significant events, such as process execution events, system call activity, I/O activity including network & file access." This project enhances secuirty a lot, but the project is also extremely helpfull in anaylysing, understanding and debuging pods behavior in a kubernetes environment.
 
+### Installing tetragon
+To get started, checkout the github repo. 
+```
+git clone https://github.com/cilium/tetragon.git
+```
+Installing tetragon via helm is straightforward
+```
+helm repo add cilium https://helm.cilium.io
+helm repo update
+helm install tetragon cilium/tetragon -n kube-system
+kubectl rollout status -n kube-system ds/tetragon -w
+```
+To verify if everything is working, we can see the first results via raw output of the tetragon logs (more specifcically the stdout container log)
+```
+kubectl logs -n kube-system -l app.kubernetes.io/name=tetragon -c export-stdout -f
+```
+### Installing tetragon-cli
+```
+curl -L https://github.com/cilium/tetragon/releases/download/tetragon-cli/tetragon-linux-amd64.tar.gz -o tetragon-linux-amd64.tar.gz
+sudo tar -C /usr/local/bin -xzvf tetragon-linux-amd64.tar.gz
+```
+Let's give it a try:
+```
+kubectl logs -n kube-system ds/tetragon -c export-stdout -f | tetragon observe
+```
+### Tracingpolicies
+By applying tracingpolicies, when can apply ebpf kernel probes easily. A series of examples are availble in the github repo.
+For example, if want to trace which process executes which metwork connections, we can simply apply:
+```
+kubectl apply -f ./crds/examples/tcp-connect.yaml
+``
+```
+kubectl logs -n kube-system ds/tetragon -c export-stdout -f | tetragon observe --namespace default 
+```
+```
+....
 
-
-
-
+```
 
 ## Recap
 
