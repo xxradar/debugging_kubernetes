@@ -107,85 +107,58 @@ kubectl get deploy/nginx-deployment -o jsonpath='{.spec.template.spec.containers
 ```
 or 
 ```
-kubectl describe po nginx-deployment-89cfdb59c-x7z94
-Name:         nginx-deployment-89cfdb59c-x7z94
-Namespace:    default
-Priority:     0
-Node:         lima-rancher-desktop/192.168.5.15
-Start Time:   Mon, 07 Feb 2022 19:44:38 +0100
-Labels:       app=nginx
-              pod-template-hash=89cfdb59c
-Annotations:  <none>
-Status:       Running
-IP:           10.42.0.234
-IPs:
-  IP:           10.42.0.234
-Controlled By:  ReplicaSet/nginx-deployment-89cfdb59c
-Containers:
-  busybox:
-    Container ID:  containerd://6ec4c86dc6176b9b51b0cb6a2fbd4456cced3f2f39f2e167411a51010c159547
-    Image:         busybox
-    Image ID:      docker.io/library/busybox@sha256:afcc7f1ac1b49db317a7196c902e61c6c3c4607d63599ee1a82d702d249a0ccb
-    Port:          <none>
-    Host Port:     <none>
+kubectl describe deploy  nginx-deployment
+Name:                   nginx-deployment
+Namespace:              default
+CreationTimestamp:      Wed, 01 Jun 2022 19:28:48 +0000
+Labels:                 app=nginx
+Annotations:            deployment.kubernetes.io/revision: 2
+Selector:               app=nginx
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx
+  Containers:
+   busybox:
+    Image:      busybox
+    Port:       <none>
+    Host Port:  <none>
     Command:
       sleep
       3600
-    State:          Running
-      Started:      Mon, 07 Feb 2022 19:44:40 +0100
-    Ready:          True
-    Restart Count:  0
-    Environment:    <none>
-    Mounts:
-      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-fkwnb (ro)
-  nginx:
-    Container ID:   containerd://d807f08e432896c265f14fa53bec26ad3036ece3b81106672de6d9309c3cd0db
-    Image:          nginx
-    Image ID:       docker.io/library/nginx@sha256:2834dc507516af02784808c5f48b7cbe38b8ed5d0f4837f16e78d00deb7e7767
-    Port:           80/TCP
-    Host Port:      0/TCP
-    State:          Running
-      Started:      Mon, 07 Feb 2022 19:44:42 +0100
-    Ready:          True
-    Restart Count:  0
-    Environment:    <none>
-    Mounts:
-      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-fkwnb (ro)
+    Environment:  <none>
+    Mounts:       <none>
+   nginx:
+    Image:        nginx
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
 Conditions:
-  Type              Status
-  Initialized       True
-  Ready             True
-  ContainersReady   True
-  PodScheduled      True
-Volumes:
-  kube-api-access-fkwnb:
-    Type:                    Projected (a volume that contains injected data from multiple sources)
-    TokenExpirationSeconds:  3607
-    ConfigMapName:           kube-root-ca.crt
-    ConfigMapOptional:       <nil>
-    DownwardAPI:             true
-QoS Class:                   BestEffort
-Node-Selectors:              <none>
-Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
-                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deployment-7b8b8fdb57 (3/3 replicas created)
 Events:
-  Type    Reason     Age    From               Message
-  ----    ------     ----   ----               -------
-  Normal  Scheduled  7m41s  default-scheduler  Successfully assigned default/nginx-deployment-89cfdb59c-x7z94 to lima-rancher-desktop
-  Normal  Pulling    7m40s  kubelet            Pulling image "busybox"
-  Normal  Pulled     7m39s  kubelet            Successfully pulled image "busybox" in 1.742582062s
-  Normal  Created    7m39s  kubelet            Created container busybox
-  Normal  Started    7m39s  kubelet            Started container busybox
-  Normal  Pulling    7m39s  kubelet            Pulling image "nginx"
-  Normal  Pulled     7m37s  kubelet            Successfully pulled image "nginx" in 1.547346047s
-  Normal  Created    7m37s  kubelet            Created container nginx
-  Normal  Started    7m37s  kubelet            Started container nginx
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  90s   deployment-controller  Scaled up replica set nginx-deployment-6c8b449b8f to 3
+  Normal  ScalingReplicaSet  63s   deployment-controller  Scaled up replica set nginx-deployment-7b8b8fdb57 to 1
+  Normal  ScalingReplicaSet  59s   deployment-controller  Scaled down replica set nginx-deployment-6c8b449b8f to 2
+  Normal  ScalingReplicaSet  59s   deployment-controller  Scaled up replica set nginx-deployment-7b8b8fdb57 to 2
+  Normal  ScalingReplicaSet  54s   deployment-controller  Scaled down replica set nginx-deployment-6c8b449b8f to 1
+  Normal  ScalingReplicaSet  54s   deployment-controller  Scaled up replica set nginx-deployment-7b8b8fdb57 to 3
+  Normal  ScalingReplicaSet  51s   deployment-controller  Scaled down replica set nginx-deployment-6c8b449b8f to 0
  ```
-Sometimes it's necessary to inspect the state of an existing pod.
-To examine a running pod, you can use the `kubectl exec` mechanism. <br>
+Sometimes it's necessary to inspect the state of an existing pod. To examine a running pod, you can use the `kubectl exec` mechanism. <br>
 This works fine to troubleshoot issues, except that secure container images do not always (and should not) contain debugging tools (distroless or hardened images) and runtime security solutions might block installing them.
 
-The example of patching containers might be a solution but as already stated, the pods are replaced, and the new debug container only shares the pods networking namespace by default.<br>
+The example of patching containers might be a solution but as already stated, the pods are replaced, and the new debug container only shares the pods networking namespace by default and not really practical and error prone <br>
 
 To troubleshoot a hard-to-reproduce bug, this might be challenging.
 
