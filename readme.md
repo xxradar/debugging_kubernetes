@@ -513,7 +513,7 @@ By applying tracingpolicies, when can apply ebpf kernel probes easily. A series 
 For example, if want to trace which process executes which metwork connections, we can simply apply:
 ```
 kubectl apply -f ./tetragon/crds/examples/tcp-connect.yaml
-``
+```
 ```
 kubectl logs -n kube-system ds/tetragon -c export-stdout -f | tetragon observe --namespace default 
 ```
