@@ -512,14 +512,30 @@ kubectl logs -n kube-system ds/tetragon -c export-stdout -f | tetragon observe
 By applying tracingpolicies, when can apply ebpf kernel probes easily. A series of examples are availble in the github repo.
 For example, if want to trace which process executes which metwork connections, we can simply apply:
 ```
-kubectl apply -f ./crds/examples/tcp-connect.yaml
+kubectl apply -f ./tetragon/crds/examples/tcp-connect.yaml
 ``
 ```
 kubectl logs -n kube-system ds/tetragon -c export-stdout -f | tetragon observe --namespace default 
 ```
 ```
-....
+🚀 process default/test /bin/bash
+🚀 process default/test /usr/bin/groups
+🚀 process default/test /usr/bin/dircolors -b
+🚀 process default/test /usr/bin/curl 192.168.216.19
+🔌 connect default/test /usr/bin/curl tcp 192.168.160.71:18662 -> 192.168.216.19:80
 
+```
+In another terminal, we can generate some traffic
+```
+$ kubectl run -it --rm --image xxradar/hackon test
+If you don't see a command prompt, try pressing enter.
+root@test:/# curl 192.168.216.198
+<!DOCTYPE html>
+<html>
+<head>
+...
+</html>
+root@test:/#
 ```
 
 ## Recap
