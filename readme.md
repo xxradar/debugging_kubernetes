@@ -478,7 +478,7 @@ To verify if everything is working, we can see the first results via raw output 
 kubectl logs -n kube-system -l app.kubernetes.io/name=tetragon -c export-stdout -f
 ```
 ```
-{"process_exec":{"process":{"exec_id":"aXAtMTAtMS0yLTY4OjE0NDcwODAwMDAwMDA6MTcxNzA=","pid":17170,"uid":0,"cwd":"/","binary":"/usr/sbin/nginx","flags":"procFS auid rootcwd","start_time":"2022-06-01T19:35:53.684Z","auid":0,"pod":{"namespace":"default","name":"nginx-deployment-6c8b449b8f-tpz4h","container":{"id":"containerd://a486a3173f3ef8b300e7cc970010e86f13f097c90c159362483e2a3b324f35ce","name":"nginx","image":{"id":"docker.io/library/nginx@sha256:2bcabc23b45489fb0885d69a06ba1d648aeda973fae7bb981bafbb884165e514","name":"docker.io/library/nginx:latest"},"start_time":"2022-06-01T19:35:53Z","pid":31}},"docker":"a486a3173f3ef8b300e7cc970010e86","parent_exec_id":"aXAtMTAtMS0yLTY4OjE0NDcwNDAwMDAwMDA6MTcxMjI=","refcnt":1},"parent":{"exec_id":"aXAtMTAtMS0yLTY4OjE0NDcwNDAwMDAwMDA6MTcxMjI=","pid":17122,"uid":0,"cwd":"/","binary":"/usr/sbin/nginx","flags":"procFS auid rootcwd","start_time":"2022-06-01T19:35:53.644Z","auid":0,"pod":{"namespace":"default","name":"nginx-deployment-6c8b449b8f-tpz4h","container":{"id":"containerd://a486a3173f3ef8b300e7cc970010e86f13f097c90c159362483e2a3b324f35ce","name":"nginx","image":{"id":"docker.io/library/nginx@sha256:2bcabc23b45489fb0885d69a06ba1d648aeda973fae7bb981bafbb884165e514","name":"docker.io/library/nginx:latest"},"start_time":"2022-06-01T19:35:53Z","pid":1}},"docker":"a486a3173f3ef8b300e7cc970010e86","parent_exec_id
+{"process_exec":{"process":{"exec_id":"aXAtMTAtMS0yLTY4OjE0NDcwODAwMDAwMDA6MTcxNzA=","pid":17170,"uid":0,"cwd":"/","binary":"/usr/...
 ```
 ### Installing tetragon-cli
 ```
@@ -488,6 +488,25 @@ sudo tar -C /usr/local/bin -xzvf tetragon-linux-amd64.tar.gz
 Let's give it a try:
 ```
 kubectl logs -n kube-system ds/tetragon -c export-stdout -f | tetragon observe
+```
+```
+🚀 process default/nginx-deployment-6c8b449b8f-9s7s9 /usr/sbin/nginx
+🚀 process default/nginx-deployment-6c8b449b8f-tpz4h /usr/sbin/nginx
+🚀 process default/nginx-deployment-6c8b449b8f-9s7s9 /usr/sbin/nginx
+🚀 process default/nginx-deployment-6c8b449b8f-9s7s9 /usr/sbin/nginx
+🚀 process default/nginx-deployment-6c8b449b8f-9s7s9 /usr/sbin/nginx
+🚀 process default/nginx-deployment-6c8b449b8f-9s7s9 /usr/sbin/nginx
+🚀 process default/nginx-deployment-6c8b449b8f-tpz4h /usr/sbin/nginx
+🚀 process default/nginx-deployment-6c8b449b8f-tpz4h /usr/sbin/nginx
+🚀 process default/nginx-deployment-6c8b449b8f-tpz4h /usr/sbin/nginx
+🚀 process default/nginx-deployment-6c8b449b8f-tpz4h /usr/sbin/nginx
+🚀 process default/my-debugger2 /usr/sbin/nginx
+🚀 process default/my-debugger2 /usr/bin/bash
+🚀 process default/my-debugger2 /usr/sbin/nginx
+🚀 process default/my-debugger2 /usr/sbin/nginx
+🚀 process default/my-debugger2 /usr/sbin/nginx
+🚀 process default/my-debugger2 /usr/sbin/nginx
+...
 ```
 ### Tracingpolicies
 By applying tracingpolicies, when can apply ebpf kernel probes easily. A series of examples are availble in the github repo.
