@@ -2,21 +2,35 @@
 ## Introduction
 Pods are the fundamental building block of Kubernetes applications. They are the smallest, most basic deployable resource and can represent as little as a single instance of a running process. Pods are made of one or more containers sharing some specific Linux namespaces (`netns`, `utsns` and `ipcns`). That is why containers in a pod can share the network interface, IP address, network ports and hostname and communicate over `localhost` or the `127.0.0.1` IP address. On the other hand, containers inside the pod do not share the filesystem (`mntns`), nor can they see each other processes (`pidns`) by default.  You can visualize this by:
 ```
-# Let's find the process id of an nginx process
+# Quickly launch a pod
+kubectl run --image nginx demowww
+
+# identify the node where the pod is running
+kubect get po -o wide 
+
+# On the scheduled node, let's find the process id of an nginx process
 $ ps aux | grep -i nginx
 root      6229  0.0  0.0   9092  6548 ?        Ss   16:07   0:00 nginx: master process nginx -g daemon off;
 
 # Based on the process id, find all assigned namespaces
 $ sudo ps -ax -n -o pid,netns,utsns,ipcns,mntns,pidns,cmd | grep 6229
  6229 4026532927 4026532396 4026532397 4026532456 4026532457 nginx: master process nginx -g daemon off;
+ ...
 
 # Based on the ex. netns, we can find all processes of the pod and find the (non)-shared namespaces.
 $ sudo ps -ax -n -o pid,netns,utsns,ipcns,mntns,pidns,cmd | grep 4026532927
  4759 4026532927 4026532396 4026532397 4026532395 4026532398 /pause
  6229 4026532927 4026532396 4026532397 4026532456 4026532457 nginx: master process nginx -g daemon off;
  6778 4026532927 4026532396 4026532397 4026532456 4026532457 nginx: worker process
+ 7016 4026532927 4026532396 4026532397 4026532456 4026532457 nginx: worker process
+ 7017 4026532927 4026532396 4026532397 4026532456 4026532457 nginx: worker process
+ 7018 4026532927 4026532396 4026532397 4026532456 4026532457 nginx: worker process
+ ...
 ```
-
+Let's cleanup
+```
+kubectl delete po demowww
+```
 ## Patching a pod deployment for debugging
 Sometimes, you might want to add a container to a running pod for debugging puposes, but this is not as simple as it sounds. When you try to update or patch a running pod to include an additional debugging container, the pod is terminated and a new one is deployed.
 
