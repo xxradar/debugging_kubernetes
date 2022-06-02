@@ -6,7 +6,7 @@ Pods are the fundamental building block of Kubernetes applications. They are the
 kubectl run --image nginx demowww
 
 # identify the node where the pod is running
-kubect get po -o wide 
+kubectl get po -o wide 
 
 # On the scheduled node, let's find the process id of an nginx process
 $ ps aux | grep -i nginx
