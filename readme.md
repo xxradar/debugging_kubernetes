@@ -33,7 +33,10 @@ Let's cleanup and move on to debugging strategies.
 kubectl delete po demowww
 ```
 ## Patching a pod deployment for debugging
-Sometimes, you might want to add a container to a running pod for debugging puposes, but this is not as simple as it sounds. When you try to update or patch a running pod to include an additional debugging container, the pod is terminated and a new one is deployed.
+Sometimes it's necessary to inspect the state of an existing pod. To examine a running pod, you can use the `kubectl exec` mechanism. <br>
+This works fine to troubleshoot issues, except that secure container images do not always (and should not) contain debugging tools (distroless or hardened images) and runtime security solutions might block installing them.
+
+Sometimes, you might want to add a container to a pod to include more debuggintg tools, but this is not as simple as it sounds. When you try to update or patch a running pod to include an additional debugging container, the pod is terminated and a new one is deployed.
 
 This behavior can be illustrated.
 
@@ -156,8 +159,12 @@ Events:
   Normal  ScalingReplicaSet  54s   deployment-controller  Scaled up replica set nginx-deployment-7b8b8fdb57 to 3
   Normal  ScalingReplicaSet  51s   deployment-controller  Scaled down replica set nginx-deployment-6c8b449b8f to 0
  ```
-Sometimes it's necessary to inspect the state of an existing pod. To examine a running pod, you can use the `kubectl exec` mechanism. <br>
-This works fine to troubleshoot issues, except that secure container images do not always (and should not) contain debugging tools (distroless or hardened images) and runtime security solutions might block installing them.
+We can now access the debug container as follows
+```
+kubectl exec -it nginx-deployment-89cfdb59c-x7z94  -c busybox -- sh
+/ # hostname
+nginx-deployment-7b8b8fdb57-bwpbn
+```
 
 The example of patching containers might be a solution but as already stated, the pods are replaced, and the new debug container only shares the pods networking namespace by default and not really practical and error prone <br>
 
