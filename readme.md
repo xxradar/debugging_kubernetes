@@ -547,8 +547,5 @@ root@test:/#
 ```
 
 ## Recap
-
-Let's do a recap on what you've learned in this article:
-
- * `kubectl debug` allows for easy debugging of pods by copying or adding an ephemeral container
- * `kubectl debug` also allows for easy debugging of the K8S nodes without the need to install additional tools.
+This tutorial tried to highlight a few possible ways to debug pods in kubernetes.
+An interesting way is via `kubectl debug`. It allows for easy debugging of pods by creating a copy of the pod or adding an ephemeral container to an existing pod, without the need to extend kubernetes. A more advanced (but promising technology EBPF) can dramatically increase the visibilty in how pods behave in order to pinpoint any problems. 
