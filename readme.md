@@ -78,7 +78,7 @@ nginx-deployment-7848d4b86f-sp6q5   1/1     Running   0          19s
 nginx-deployment-7848d4b86f-672tn   1/1     Running   0          19s
 nginx-deployment-7848d4b86f-w22ft   1/1     Running   0          19s
 ```
-Let's try to add a container to the running pods ...
+Let's try to add a container to the running pods by patching the deployment.
 ```
 cat <<EOF >patch.yaml
 spec:
