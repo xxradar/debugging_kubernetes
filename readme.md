@@ -1,6 +1,6 @@
 ## Advanced debugging techniques in Kubernetes
 ## Introduction
-Pods are the fundamental building block of Kubernetes applications. They are the smallest, most basic deployable resource and can represent as little as a single instance of a running process. Pods are made of one or more containers sharing some specific Linux namespaces (`netns`, `utsns` and `ipcns`). That is why containers in a pod can share the network interface, IP address, network ports and hostname and communicate over `localhost` or the `127.0.0.1` IP address. On the other hand, containers inside the pod do not share the filesystem (`mntns`), nor can they see each other processes (`pidns`) by default.  You can visualize this by:
+Pods are the fundamental building block of Kubernetes applications. They are the smallest, most basic deployable resource and can represent as little as a single instance of a running process. Pods are made of one or more containers sharing specific Linux namespaces (`netns`, `utsns` and `ipcns`). That is why containers in a pod can share the network interface, IP address, network ports and hostname and communicate over `localhost` or the `127.0.0.1` IP address. On the other hand, containers inside the pod do not share the filesystem (`mntns`), nor can they see each other processes (`pidns`) by default. Although this is as designed, it might complicate things when you need to troubleshoot when things go wrong. You can visualize this behavior by:
 ```
 # Quickly launch a pod
 kubectl run --image nginx demowww
@@ -28,15 +28,15 @@ $ sudo ps -ax -n -o pid,netns,utsns,ipcns,mntns,pidns,cmd | grep 4026532927
  ...
 ```
 In this example, we can clearly see that all the nginx processes belong to the same container. The `/pause` process belongs to a seperate container, but shares the the `netns`, `utsns` and `ipcns` the with the nginx container and form the pod.<br><br>
-Let's cleanup and move on to debugging strategies.
+Let's cleanup and move on to more advanced debugging strategies.
 ```
 kubectl delete po demowww
 ```
 ## Patching a pod deployment for debugging
 Sometimes it's necessary to inspect the state of an existing pod. To examine a running pod, you can use the `kubectl exec` mechanism. <br>
-This works fine to troubleshoot issues, except that secure container images do not always (and should not) contain debugging tools (distroless or hardened images) and runtime security solutions might block installing them.
+This works fine to troubleshoot issues, except that secure container images do not always (and should not) contain debugging tools (ex. distroless or hardened images) and runtime security solutions might block installing them.
 
-Sometimes, you might want to add a container to a pod to include more debuggintg tools, but this is not as simple as it sounds. When you try to update or patch a running pod to include an additional debugging container, the pod is terminated and a new one is deployed.
+Sometimes, you might want to add a container to a pod to include more debugging tools, but this is not as simple as it sounds. When you try to update or patch a running pod to include an additional debugging container, the pod is terminated and a new one is deployed.
 
 This behavior can be illustrated.
 
@@ -166,7 +166,7 @@ kubectl exec -it nginx-deployment-89cfdb59c-x7z94  -c busybox -- sh
 nginx-deployment-7b8b8fdb57-bwpbn
 ```
 
-The example of patching containers might be a solution but as already stated, the pods are replaced, and the new debug container only shares the pods networking namespace by default and not really practical and error prone <br>
+The example of patching pods might be a solution but as already stated, the pods are replaced, and the new debug container only shares the pods networking namespace by default and not really practical and error prone <br>
 
 To troubleshoot a hard-to-reproduce bug, this might be challenging.
 
@@ -489,6 +489,7 @@ kubectl logs -n kube-system -l app.kubernetes.io/name=tetragon -c export-stdout 
 {"process_exec":{"process":{"exec_id":"aXAtMTAtMS0yLTY4OjE0NDcwODAwMDAwMDA6MTcxNzA=","pid":17170,"uid":0,"cwd":"/","binary":"/usr/...
 ```
 ### Installing tetragon-cli
+Instead of analyzing raw log output, tetragon has an easy to use cli to ovbserve events captured by the ebpf probes.
 ```
 curl -L https://github.com/cilium/tetragon/releases/download/tetragon-cli/tetragon-linux-amd64.tar.gz -o tetragon-linux-amd64.tar.gz
 sudo tar -C /usr/local/bin -xzvf tetragon-linux-amd64.tar.gz
@@ -517,7 +518,7 @@ kubectl logs -n kube-system ds/tetragon -c export-stdout -f | tetragon observe
 ...
 ```
 ### Tracingpolicies
-By applying tracingpolicies, when can apply ebpf kernel probes easily. A series of examples are availble in the github repo.
+By applying tracingpolicies, when can apply ebpf kernel probes easily. A series of examples are available in the github repo.
 For example, if want to trace which process executes which metwork connections, we can simply apply:
 ```
 kubectl apply -f ./tetragon/crds/examples/tcp-connect.yaml
@@ -545,7 +546,7 @@ root@test:/# curl 192.168.216.198
 </html>
 root@test:/#
 ```
-
+We only scratched the surface of what is possible with ebpf, but I hope it clearly shows the immense possibilties it offers.
 ## Recap
 This tutorial tried to highlight a few possible ways to debug pods in kubernetes.
-An interesting way is via `kubectl debug`. It allows for easy debugging of pods by creating a copy of the pod or adding an ephemeral container to an existing pod, without the need to extend kubernetes. A more advanced (but promising technology EBPF) can dramatically increase the visibilty in how pods behave in order to pinpoint any problems. 
+An interesting way is via `kubectl debug`. It allows for easy debugging of pods by creating a copy of the pod or adding an ephemeral container to an existing pod, without the need to extend kubernetes. A more advanced (but promising technology EBPF) can dramatically increase the visibilty in how pods behave in order to pinpoint more advanced problems. 
