@@ -425,6 +425,20 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 15:28:29.970405 IP 192.168.228.0.42704 > 192.168.172.172.80: Flags [.], ack 1, win 489, options [nop,nop,TS val 3815764349 ecr 2005209487], length 0
 15:28:29.970525 IP 192.168.228.0.42704 > 192.168.172.172.80: Flags [P.], seq 1:80, ack 1, win 489, options [nop,nop,TS val 3815764349 ecr 2005209487], length 79: HTTP: GET / HTTP/1.1
 ```
+Exporting the the `tcpdump` pcap to analyse it in Wireshark for example is slightly more complicated, but worth the effort.
+```
+root@nginx-deployment-74d589986c-5bmgh:~# tcpdump -n port 80 -o w tcpdump.pcap
+tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+^C36 packets captured
+36 packets received by filter
+0 packets dropped by kernel
+```
+Keep the debug container shell open and from another shell copy the file
+```
+kubectl cp  nginx-deployment-74d589986c-96x5s:/tcpdump.pcap -c debug tcpdump.pcap
+```
+You can now open the tcpdump.pcap file in Wireshark
+... put image link ....
 
 ### Usecase 3: Accessing a node
 The first two usecases discussed focus on debugging a troublesome pod. In some cases we might need to debug and troubleshoot the kubernetes node.
