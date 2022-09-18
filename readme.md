@@ -478,6 +478,13 @@ drwxr-xr-x  4 root root    4096 Jan 12  2020 acpi
 -rw-r--r--  1 root root    3028 Jan 12  2020 adduser.conf
 ...
 ```
+Please note that all commands issued are running inside the context of the container. <br>
+This is fine while we try to investigate host processes or change/edit files on the filesystem.
+<br>
+But what if you want execute commands in the context of the node? 
+```
+chroot /host
+```
 
 ## Introducing EBPF and @Ciliumproject Tetragon
 ### What is EBPF ?
