@@ -438,7 +438,7 @@ Keep the debug container shell open and from another shell copy the file
 kubectl cp  nginx-deployment-74d589986c-96x5s:/tcpdump.pcap -c debug tcpdump.pcap
 ```
 You can now open the tcpdump.pcap file in Wireshark
-... put image link ....
+![My Image](./images/wireshark.png)
 
 ### Usecase 3: Accessing a node
 The first two usecases discussed focus on debugging a troublesome pod. In some cases we might need to debug and troubleshoot the kubernetes node.
