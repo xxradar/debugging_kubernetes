@@ -427,7 +427,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 ```
 Exporting the the `tcpdump` pcap to analyse it in Wireshark for example is slightly more complicated, but worth the effort.
 ```
-root@nginx-deployment-74d589986c-5bmgh:~# tcpdump -n port 80 -o w tcpdump.pcap
+root@nginx-deployment-74d589986c-5bmgh:~# tcpdump -n port 80 -w tcpdump.pcap
 tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 ^C36 packets captured
 36 packets received by filter
