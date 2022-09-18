@@ -437,7 +437,7 @@ Keep the debug container shell open and from another shell copy the file
 ```
 kubectl cp  nginx-deployment-74d589986c-96x5s:/tcpdump.pcap -c debug tcpdump.pcap
 ```
-You can now open the tcpdump.pcap file in Wireshark
+You can now open the tcpdump.pcap file in Wireshark. (example form an AKS cluster)
 ![My Image](./images/wireshark.png)
 
 ### Usecase 3: Accessing a node
