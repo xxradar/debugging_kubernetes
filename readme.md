@@ -27,7 +27,7 @@ $ sudo ps -ax -n -o pid,netns,utsns,ipcns,mntns,pidns,cmd | grep 4026532927
  7018 4026532927 4026532396 4026532397 4026532456 4026532457 nginx: worker process
  ...
 ```
-In this example, we can clearly see that all the nginx processes belong to the same container. The `/pause` process belongs to a seperate container, but shares the the `netns`, `utsns` and `ipcns` the with the nginx container and form the pod.<br><br>
+In this example, we can clearly see that all the nginx processes belong to the same container. The `/pause` process belongs to a seperate container, but shares the the `netns`, `utsns` and `ipcns` with the nginx container and form the pod.<br><br>
 Let's cleanup and move on to more advanced debugging strategies.
 ```
 kubectl delete po demowww
